@@ -1,13 +1,15 @@
-const AppError = require("../util/AppError")
+const AppError = require("../utils/AppError")
+const knex = require("../database/knex")
+const { compare } = require('bcryptjs')
 
 class AuthUsers{
     async authUpdate(request, response, next){
         const { oldPassword, newPassword, id } = request.body
         if (!id) {
-            throw new AppError
+            throw new AppError('', '')
         }
         if ((oldPassword && !newPassword) || (!oldPassword && newPassword) ) {
-            throw new AppError
+            throw new AppError('', '')
         }
         next()
     }
@@ -23,7 +25,11 @@ class AuthUsers{
         next()
     }
     async authRegister(request, response, next){
-
+        const { email } = request.body
+        const data = await knex("users").where({email}).first()
+        if(data){
+            throw new AppError('Email Existente', 'email')
+        } 
         next()
     }
     async authLogin(request, response, next){
@@ -31,11 +37,11 @@ class AuthUsers{
         const {email, password} = request.body
         if(!email){
             //Digite Email
-            throw AppError
+            throw AppError('', '')
         }
         if(!password){
             //Digite Senha
-            throw AppError
+            throw AppError('', '')
         }
         //Gerar token e recuperar o id
 
