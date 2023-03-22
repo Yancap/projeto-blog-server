@@ -1,12 +1,22 @@
 const AppError = require("../utils/AppError")
 const { hash } = require("bcryptjs")
 const knex = require("../database/knex")
+const authConfig = require("../config/auth")
+const { sign, verify } = require('jsonwebtoken')
 
 class UsersController{
     async show(request, response){
-        const { token, id } = request.body
-        //Mostrar o Nome do Usuario e o Avatar e Retornar o token para armazenamento
-        //no LocalStorage
+        const { token, id, name, avatar, hierarchy } = request.body
+        if (!token) {
+            const { secret, expiresIn } = authConfig.jwt
+            const token = sign({}, secret, {
+                subject: String(id),
+                expiresIn
+            })
+            return response.json({token, name, avatar, hierarchy})
+        } else {
+            return response.json({token, name, avatar, hierarchy})
+        }
     }
     async create(request, response){
         const { name, email, password } = request.body
@@ -17,7 +27,7 @@ class UsersController{
                 password: hashPassword, hierarchy: 'reader'
             }
             await knex('users').insert(data)
-            response.json({message: 'OK'})
+            return response.json({message: 'OK'})
         } catch (error){
             throw new AppError(error, 'CRUD')
         }
