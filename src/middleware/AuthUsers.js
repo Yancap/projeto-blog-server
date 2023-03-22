@@ -8,10 +8,11 @@ class AuthUsers{
     async authUpdate(request, response, next){
         const { oldPassword, newPassword, id } = request.body
         if (!id) {
-            throw new AppError('', '')
+            throw new AppError('Sem Dados', 'redirect', 401, '/login')
         }
-        if ((oldPassword && !newPassword) || (!oldPassword && newPassword) ) {
-            throw new AppError('', '')
+        if ((oldPassword && !newPassword) || (!oldPassword && newPassword)) {
+            throw new AppError('', 'update-password')
+            
         }
         next()
     }
@@ -70,7 +71,7 @@ class AuthUsers{
 
         //Caso não exista token, email ou senha recebidos, enviar um redirecionamento
         //para o usuario fazer o login
-        if(!email && !password) throw  new AppError('Sem Dados', 'redirect', 401, '/login')
+        if(!email && !password) throw new AppError('Sem Dados', 'redirect', 401, '/login')
         const data = await knex("users").where({email}).first()
         if(!data) throw new AppError('Dados Incorretos', 'login')
         const check = await compare(password, data.password)
