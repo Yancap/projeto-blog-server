@@ -11,8 +11,7 @@ class AuthUsers{
             throw new AppError('Sem Dados', 'redirect', 401, '/login')
         }
         if ((oldPassword && !newPassword) || (!oldPassword && newPassword)) {
-            throw new AppError('', 'update-password')
-            
+            throw new AppError('Digite as Duas Senhas', 'update-password')
         }
         next()
     }
@@ -28,9 +27,11 @@ class AuthUsers{
         const head  = request.headers.authorization
         if ( head ) {
             const [, token ] = head.split(" ")
+
             try {
                 const {sub: id} = verify(token, authConfig.jwt.secret)
                 request.body = {
+                    ...request.body,
                     token,
                     id: Number(id)
                 }
@@ -54,10 +55,8 @@ class AuthUsers{
         next()
     }
     async authLogin(request, response, next){
-        
         const {email, password, token, id} = request.body
-        if(token && id) {
-            
+        if(id) {
             const data = await knex("users").where({id}).first()
             request.body = {
                 token,
@@ -68,7 +67,6 @@ class AuthUsers{
             }
             return next()
         }
-
         //Caso não exista token, email ou senha recebidos, enviar um redirecionamento
         //para o usuario fazer o login
         if(!email && !password) throw new AppError('Sem Dados', 'redirect', 401, '/login')

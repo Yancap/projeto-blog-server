@@ -36,11 +36,14 @@ class UsersController{
     async update(request, response){
         const { id, avatar, newPassword } = request.body
         if(avatar){
-            //Adicionar ou Atualizar o Avatar
+            await knex('users').where({id}).update({avatar})
+            return response.json({message: 'OK'})
         } else if (newPassword){
-            //Trocar e Atualizar a Senha
+            const hashPassword = await hash(newPassword, 8)
+            await knex('users').where({id}).update({password: hashPassword})
+            return response.json({message: 'OK'})
         } else{
-            throw new AppError('', '')
+            throw new AppError('Sem Dados', 'redirect', 401, '/login')
         }
     }
 }

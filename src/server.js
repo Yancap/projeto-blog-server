@@ -5,7 +5,7 @@ const app = express()
 const routes = require('./routes')
 const AppError = require("./utils/AppError")
 
-app.use(express.json())
+app.use(express.json({limit: '5mb'}))
 app.use(routes)
 app.use((error, request, response, next) => {
     if (error instanceof AppError) {

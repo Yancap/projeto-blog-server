@@ -11,4 +11,5 @@ usersRoutes.post('/register', authUsers.authRegister, usersController.create)
 usersRoutes.put('/avatar', authUsers.authToken, usersController.update)
 usersRoutes.put('/change-password', authUsers.authToken, authUsers.authUpdate, usersController.update)
 
+
 module.exports = usersRoutes
