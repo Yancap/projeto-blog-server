@@ -13,9 +13,9 @@ class UsersController{
                 subject: String(id),
                 expiresIn
             })
-            return response.json({token, name, avatar, hierarchy})
+            return response.json({token, name, avatar, hierarchy, id})
         } else {
-            return response.json({token, name, avatar, hierarchy})
+            return response.json({token, name, avatar, hierarchy, id})
         }
     }
     async create(request, response){
