@@ -38,6 +38,7 @@ class AuthArticles{
         } else{
             new AppError('Hierarquia não encontrada', 'no-hierarchy', 500)
         }
+        next()
     }
     async authCreate(request, response, next){
         const { action } = request.body

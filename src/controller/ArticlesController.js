@@ -3,23 +3,22 @@ const knex = require("../database/knex")
 
 class ArticlesController{
     async create(request, response){
-        const { action } = request.body
-        if(action.create === 'reject') throw new AppError('Sem Autorização', 'forbidden', 403)
-        const { title, subtitle, text, id: user_id, tags } = request.body
+        const { title, subtitle, text, id: user_id } = request.body
+        let { tags } = request.body
         const tagsData = await knex('tags').whereIn('text', tags)
-        console.log(tagsData);
-        return 0
-        if(!tagsData){
-            tags = tags.forEach(item => {
-                return {text: item}
+        if(!tagsData[0]){
+            const newTags = tags.map(item => {
+                return {'text': item}
             });
-            const tagsId = await knex('tags').insert(tags)
-            const tag_id = tagsId.map((item)=> item)
+            await knex('tags').insert(newTags)
+            let tag_id = await (await knex('tags').whereIn('text', tags)).map(data => data.id)
+            console.log(tag_id);
             await knex('articles').insert({
                 title, subtitle, text, user_id, tag_id
             })
+            response.json({message: 'OK'})
         } else if (tags.length !== tagsData.length){
-            let tagsArray = tagsData.forEach(item => item.text)
+            let tagsArray = tagsData.map(item => item.text)
             let tagsNotInclude = []
             tags.forEach((tag)=>{
                 if(!tagsArray.include(tag)){
@@ -30,7 +29,7 @@ class ArticlesController{
             let tag_id = tagsId.map((item)=> item)
             tag_id = [
                 ...tag_id,
-                tagsData.forEach(item => item.id)
+                tagsData.map(item => item.id)
             ]
         }
     }
