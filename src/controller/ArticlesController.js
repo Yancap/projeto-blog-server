@@ -4,43 +4,65 @@ const knex = require("../database/knex")
 class ArticlesController{
     async create(request, response){
         const { title, subtitle, text, id: user_id } = request.body
-        let { tags } = request.body
-        const tagsData = await knex('tags').whereIn('text', tags)
+        let { tags_name } = request.body
+        let tagsArray = tags_name.split(" ")
+        const tagsData = await knex('tags').whereIn('text', tagsArray)
         if(!tagsData[0]){
-            const newTags = tags.map(item => {
+            const newTags = tagsArray.map(item => {
                 return {'text': item}
             });
             await knex('tags').insert(newTags)
-            let tag_id = await (await knex('tags').whereIn('text', tags)).map(data => data.id)
-            console.log(tag_id);
-            await knex('articles').insert({
-                title, subtitle, text, user_id, tag_id
+            let article_id = await knex('articles').insert({
+                title, subtitle, text, user_id, tags_name
             })
-            response.json({message: 'OK'})
-        } else if (tags.length !== tagsData.length){
-            let tagsArray = tagsData.map(item => item.text)
+            article_id = article_id.reduce(id => id)
+            const article = await knex('articles').where({id: article_id}).first()
+            response.json({message: 'OK', article})
+        } else if (tagsArray.length !== tagsData.length){
+            let tagsAux = tagsData.map(item => item.text)
             let tagsNotInclude = []
-            tags.forEach((tag)=>{
-                if(!tagsArray.include(tag)){
+            tagsArray.forEach((tag)=>{
+                if(!tagsAux.includes(tag)){
                     tagsNotInclude.push({text: tag})
                 }
             })
-            const tagsId = await knex('tags').insert(tagsNotInclude) 
-            let tag_id = tagsId.map((item)=> item)
-            tag_id = [
-                ...tag_id,
-                tagsData.map(item => item.id)
-            ]
+            await knex('tags').insert(tagsNotInclude) 
+            let article_id = await knex('articles').insert({
+                title, subtitle, text, user_id, tags_name
+            })
+            article_id = article_id.reduce(id => id)
+            const article = await knex('articles').where({id: article_id}).first()
+            response.json({message: 'OK', article})
+        } else if (tagsArray.length === tagsData.length){
+            console.log('tem todas as tags');
+            let article_id = await knex('articles').insert({
+                title, subtitle, text, user_id, tags_name
+            })
+            article_id = article_id.reduce(id => id)
+            const article = await knex('articles').where({id: article_id}).first()
+            response.json({message: 'OK', article})
+        } else{
+            throw new AppError('error', 'internal-error', 500)
         }
     }
     async update(request, response){
                 
     }
     async delete(request, response){
-                
+        const { id, article_id } = request.body
+        if(article_id){
+            await knex('article').where({id: article_id}).delete()
+            response.json({message: 'OK'})
+        } else {
+            const { title, tags_name } = request.body
+            await knex('articles').where({user_id: id}).where({title, tags_name}).delete()
+            response.json({message: 'OK'})
+        }
     }
     async index(request, response){
-                
+        const articles = await knex('articles')
+        const tags = await knex('tags')
+        response.json({articles, tags})       
     }
     async show(request, response){
                 

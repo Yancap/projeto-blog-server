@@ -11,9 +11,9 @@ const authArticles = new AuthArticles
 
 
 articlesRoutes.post('/create', authArticles.verifyUsers, authArticles.authCreate, articlesController.create)
-// articlesRoutes.delete('/delete', authArticles.verifyUsers,  articlesController.delete)
+articlesRoutes.delete('/delete', authArticles.verifyUsers, authArticles.authDelete,   articlesController.delete)
 // articlesRoutes.get('/show',  authArticles.verifyUsers, articlesController.show)
-// articlesRoutes.get('/show-all', authArticles.verifyUsers, articlesController.index)
+articlesRoutes.get('/show-all', articlesController.index)
 
 // articlesRoutes.post('/create-comments', commentsController.create)
 // articlesRoutes.delete('/delete-comments', commentsController.delete)

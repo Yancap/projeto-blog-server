@@ -45,6 +45,11 @@ class AuthArticles{
         if(action.create === 'reject') throw new AppError('Sem Autorização', 'forbidden', 403)
         next()
     }
+    async authDelete(request, response, next){
+        const { action } = request.body
+        if(action.delete === 'reject') throw new AppError('Sem Autorização', 'forbidden', 403)
+        next()
+    }
 }
 
 module.exports = AuthArticles
