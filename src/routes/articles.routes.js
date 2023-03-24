@@ -11,7 +11,8 @@ const authArticles = new AuthArticles
 
 
 articlesRoutes.post('/create', authArticles.verifyUsers, authArticles.authCreate, articlesController.create)
-articlesRoutes.delete('/delete', authArticles.verifyUsers, authArticles.authDelete,   articlesController.delete)
+articlesRoutes.delete('/delete', authArticles.verifyUsers, authArticles.authDelete,  articlesController.delete)
+articlesRoutes.put('/update', authArticles.verifyUsers, authArticles.authCreate,  articlesController.update)
 // articlesRoutes.get('/show',  authArticles.verifyUsers, articlesController.show)
 articlesRoutes.get('/show-all', articlesController.index)
 

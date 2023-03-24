@@ -46,7 +46,16 @@ class ArticlesController{
         }
     }
     async update(request, response){
-                
+        const { title, subtitle, text, tags_name, id: user_id, article_id: id} = request.body
+        try{
+            if (title) await knex('articles').where({id, user_id}).update({title})
+            if (subtitle) await knex('articles').where({id, user_id}).update({subtitle})
+            if (text) await knex('articles').where({id, user_id}).update({text})
+            if (tags_name) await knex('articles').where({id, user_id}).update({tags_name})
+            response.json({message: 'OK'})
+        } catch(error){
+            throw new AppError(error)
+        }
     }
     async delete(request, response){
         const { id, article_id } = request.body
