@@ -8,17 +8,18 @@ const commentsController = new CommentsController
 
 const AuthArticles = require('../middleware/AuthArticles')
 const authArticles = new AuthArticles
-
+const AuthComments = require('../middleware/AuthComments')
+const authComments = new AuthComments
 
 articlesRoutes.post('/create', authArticles.verifyUsers, authArticles.authCreate, articlesController.create)
 articlesRoutes.delete('/delete', authArticles.verifyUsers, authArticles.authDelete,  articlesController.delete)
 articlesRoutes.put('/update', authArticles.verifyUsers, authArticles.authCreate,  articlesController.update)
-// articlesRoutes.get('/show',  authArticles.verifyUsers, articlesController.show)
+articlesRoutes.get('/show', articlesController.show)
 articlesRoutes.get('/show-all', articlesController.index)
 
-// articlesRoutes.post('/create-comments', commentsController.create)
-// articlesRoutes.delete('/delete-comments', commentsController.delete)
-// articlesRoutes.get('/comments', commentsController.index)
+articlesRoutes.post('/create-comments', authComments.verify, commentsController.create)
+articlesRoutes.delete('/delete-comments', authComments.verify, commentsController.delete)
+articlesRoutes.get('/comments', commentsController.index)
 
 
 module.exports = articlesRoutes

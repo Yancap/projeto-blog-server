@@ -74,7 +74,11 @@ class ArticlesController{
         response.json({articles, tags})       
     }
     async show(request, response){
-                
+        const { id } = request.query
+        console.log(id);
+        const article = await knex('articles').where({id}).first()
+        if(!article) return new AppError('Esse Artigo não existe ou foi excluido', 'not_found', 404)
+        return response.json(article)
     }
 
 }
