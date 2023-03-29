@@ -4,7 +4,7 @@ const searchRoutes = Router()
 const SearchController = require('../controller/SearchController')
 const searchController = new SearchController
 
-searchRoutes.get('/search/:q', SearchController.index)
+searchRoutes.get('/', searchController.index)
 
 
 
