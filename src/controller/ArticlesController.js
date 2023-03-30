@@ -4,16 +4,19 @@ const knex = require("../database/knex")
 class ArticlesController{
     async create(request, response){
         const { title, subtitle, text, id: user_id } = request.body
-        let { tags_name } = request.body
+        let { tags_name, author } = request.body
         let tagsArray = tags_name.split(" ")
         const tagsData = await knex('tags').whereIn('text', tagsArray)
+        if(!author){
+            author = await (await knex('users').where({id: user_id}).first()).name
+        }
         if(!tagsData[0]){
             const newTags = tagsArray.map(item => {
                 return {'text': item}
             });
             await knex('tags').insert(newTags)
             let article_id = await knex('articles').insert({
-                title, subtitle, text, user_id, tags_name
+                title, subtitle, text, user_id, tags_name, author
             })
             article_id = article_id.reduce(id => id)
             const article = await knex('articles').where({id: article_id}).first()
@@ -28,7 +31,7 @@ class ArticlesController{
             })
             await knex('tags').insert(tagsNotInclude) 
             let article_id = await knex('articles').insert({
-                title, subtitle, text, user_id, tags_name
+                title, subtitle, text, user_id, tags_name, author
             })
             article_id = article_id.reduce(id => id)
             const article = await knex('articles').where({id: article_id}).first()
@@ -36,7 +39,7 @@ class ArticlesController{
         } else if (tagsArray.length === tagsData.length){
             console.log('tem todas as tags');
             let article_id = await knex('articles').insert({
-                title, subtitle, text, user_id, tags_name
+                title, subtitle, text, user_id, tags_name, author
             })
             article_id = article_id.reduce(id => id)
             const article = await knex('articles').where({id: article_id}).first()

@@ -27,9 +27,11 @@ class SearchController{
             })
             response.json({article})
         } else if (author){
-            console.log(1);
+            const articles = await knex('articles').whereLike('author', `%${author}%`)
+            response.json(articles)
         } else if (hashtag){
-            console.log(1);
+            const articles = await knex('articles').whereLike('tags_name', `%${hashtag}%`)
+            response.json(articles)
         } else{
             throw new AppError('Sem Dados', 'not_data')
         }

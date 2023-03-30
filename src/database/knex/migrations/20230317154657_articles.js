@@ -2,6 +2,7 @@ exports.up = knex => knex.schema.createTable("articles", table =>{
     table.increments('id')
     table.integer('user_id').references('id').inTable('users').onDelete("CASCADE")
     table.text('tags_name')
+    table.text("author")
     table.text("title")
     table.text("subtitle")
     table.text("text")
