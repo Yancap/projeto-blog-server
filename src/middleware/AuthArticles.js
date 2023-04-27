@@ -50,6 +50,12 @@ class AuthArticles{
         if(action.delete === 'reject') throw new AppError('Sem Autorização', 'forbidden', 403)
         next()
     }
+    async countAccess(request, response, next){
+        const { id, access } = request.query
+        if(access) await knex('articles').where({id}).update({access: access + 1})
+        next()
+        //O access deve ser passado quando alguem clicar para ler e não quando clicar para editar
+    }
 }
 
 module.exports = AuthArticles

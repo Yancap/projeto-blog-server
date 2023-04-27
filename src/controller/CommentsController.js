@@ -23,6 +23,11 @@ class CommentsController{
         if(comments === 0) throw new AppError('Comentário Inexistente ou não autorizado', 'forbidden', 403)
         return response.json({message:"OK"})
     }
+    async show(request, response){
+        const {id} = request.query
+        const comments = await knex("comments").where({article_id: id})
+        return response.json({comments})
+    }
 }
 
 module.exports = CommentsController

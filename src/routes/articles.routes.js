@@ -14,12 +14,12 @@ const authComments = new AuthComments
 articlesRoutes.post('/create', authArticles.verifyUsers, authArticles.authCreate, articlesController.create)
 articlesRoutes.delete('/delete', authArticles.verifyUsers, authArticles.authDelete,  articlesController.delete)
 articlesRoutes.put('/update', authArticles.verifyUsers, authArticles.authCreate,  articlesController.update)
-articlesRoutes.get('/show', articlesController.show)
+articlesRoutes.get('/show', authArticles.countAccess, articlesController.show)
 articlesRoutes.get('/show-all', articlesController.index)
 
 articlesRoutes.post('/create-comments', authComments.verify, commentsController.create)
 articlesRoutes.delete('/delete-comments', authComments.verify, commentsController.delete)
-articlesRoutes.get('/comments', commentsController.index)
-
+articlesRoutes.get('/all-comments', commentsController.index)
+articlesRoutes.get('/comments', commentsController.show)
 
 module.exports = articlesRoutes
