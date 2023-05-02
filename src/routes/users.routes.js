@@ -10,6 +10,6 @@ usersRoutes.post('/login', authUsers.authToken, authUsers.authLogin, usersContro
 usersRoutes.post('/register', authUsers.authRegister, usersController.create)
 usersRoutes.put('/avatar', authUsers.authToken, usersController.update)
 usersRoutes.put('/change-password', authUsers.authToken, authUsers.authUpdate, usersController.update)
-
+usersRoutes.get('/author', usersController.index)
 
 module.exports = usersRoutes

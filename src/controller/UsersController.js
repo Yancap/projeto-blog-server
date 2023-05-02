@@ -46,6 +46,19 @@ class UsersController{
             throw new AppError('Sem Dados', 'redirect', 401, '/login')
         }
     }
+    async index(request, response){
+        const { id } = request.query
+        const author = await knex('users').where({id}).first()
+        if(author){
+            return response.json({
+                id: author.id,
+                name: author.name,
+                avatar: author.avatar,
+            })
+        } else{
+            throw new AppError('Usuário não encontrado', 'not_found')
+        }
+    }
 }
 
 module.exports = UsersController
