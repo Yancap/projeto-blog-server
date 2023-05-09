@@ -3,7 +3,7 @@ const knex = require("../database/knex")
 
 class AuthArticles{
     async verifyUsers(request, response, next){
-        const { id, hierarchy } = request.body
+        const { user_id: id, hierarchy } = request.body
         if (!id) throw new AppError('Sem Dados', 'redirect', 401, '/login')
         if (!hierarchy) throw new AppError('Sem a Hierarquia', 'no-hierarchy', 401)
         if (hierarchy === 'reader') {

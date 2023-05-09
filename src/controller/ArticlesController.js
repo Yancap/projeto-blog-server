@@ -3,12 +3,14 @@ const knex = require("../database/knex")
 
 class ArticlesController{
     async create(request, response){
-        const { title, subtitle, text, id: user_id } = request.body
+        const { title, subtitle, text, user_id, image} = request.body
+        console.log(request.body);
         let { tags_name, author } = request.body
         let tagsArray = tags_name.split(" ")
         const tagsData = await knex('tags').whereIn('text', tagsArray)
         if(!author){
             author = await (await knex('users').where({id: user_id}).first()).name
+            console.log(author);
         }
         if(!tagsData[0]){
             const newTags = tagsArray.map(item => {
@@ -31,7 +33,7 @@ class ArticlesController{
             })
             await knex('tags').insert(tagsNotInclude) 
             let article_id = await knex('articles').insert({
-                title, subtitle, text, user_id, tags_name, author, access: 0
+                title, subtitle, text, user_id, tags_name, author, access: 0, image
             })
             article_id = article_id.reduce(id => id)
             const article = await knex('articles').where({id: article_id}).first()
@@ -39,7 +41,7 @@ class ArticlesController{
         } else if (tagsArray.length === tagsData.length){
             console.log('tem todas as tags');
             let article_id = await knex('articles').insert({
-                title, subtitle, text, user_id, tags_name, author, access: 0
+                title, subtitle, text, user_id, tags_name, author, access: 0, image
             })
             article_id = article_id.reduce(id => id)
             const article = await knex('articles').where({id: article_id}).first()
@@ -49,14 +51,17 @@ class ArticlesController{
         }
     }
     async update(request, response){
-        const { title, subtitle, text, tags_name, id: user_id, article_id: id} = request.body
+        const { title, subtitle, text, tags_name, article_id: id, image} = request.body
+        console.log(image);
         try{
-            if (title) await knex('articles').where({id, user_id}).update({title})
-            if (subtitle) await knex('articles').where({id, user_id}).update({subtitle})
-            if (text) await knex('articles').where({id, user_id}).update({text})
-            if (tags_name) await knex('articles').where({id, user_id}).update({tags_name})
+            if (title) await knex('articles').where({id}).update({title})
+            if (subtitle) await knex('articles').where({id}).update({subtitle})
+            if (text) await knex('articles').where({id}).update({text})
+            if (image) await knex('articles').where({id}).update({image})
+            if (tags_name) await knex('articles').where({id}).update({tags_name})
             response.json({message: 'OK'})
         } catch(error){
+            console.log(error);
             throw new AppError(error)
         }
     }
