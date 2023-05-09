@@ -52,7 +52,6 @@ class ArticlesController{
     }
     async update(request, response){
         const { title, subtitle, text, tags_name, article_id: id, image} = request.body
-        console.log(image);
         try{
             if (title) await knex('articles').where({id}).update({title})
             if (subtitle) await knex('articles').where({id}).update({subtitle})
