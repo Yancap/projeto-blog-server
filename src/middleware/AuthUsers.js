@@ -16,14 +16,6 @@ class AuthUsers{
         next()
     }
     async authToken(request, response, next){
-
-        //O Token ficarar no header da requisição
-        /*
-        'No Fetch API do Front End
-        headers{
-            authorization: "Bearer " + token
-        }
-        */
         const head  = request.headers.authorization
         if ( head ) {
             const [, token ] = head.split(" ")
