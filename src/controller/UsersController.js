@@ -1,22 +1,17 @@
 const AppError = require("../utils/AppError")
 const { hash } = require("bcryptjs")
 const knex = require("../database/knex")
-const authConfig = require("../config/auth")
+const authConfig = require("../config")
 const { sign, verify } = require('jsonwebtoken')
+const LoginServices = require("../services/LoginServices")
+
+
+const loginServices = new LoginServices()
 
 class UsersController{
     async show(request, response){
-        const { token, id, name, avatar, hierarchy } = request.body
-        if (!token) {
-            const { secret, expiresIn } = authConfig.jwt
-            const token = sign({}, secret, {
-                subject: String(id),
-                expiresIn
-            })
-            return response.json({token, name, avatar, hierarchy, id})
-        } else {
-            return response.json({token, name, avatar, hierarchy, id})
-        }
+        const { token, user_id, email, password } = request.body
+        return response.json(await loginServices.login({token, user_id, email, password}))
     }
     async create(request, response){
         const { name, email, password } = request.body
