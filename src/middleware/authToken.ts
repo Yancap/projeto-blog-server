@@ -7,9 +7,7 @@ export default async function authToken(request: Request, response: Response, ne
     const head  = request.headers.authorization
     if ( head ) {
         const [, token ] = head.split(" ")
-
         if (!token) return next()
-        
         try {
             const {sub: id} = verify(token, config.jwt.secret)
             request.body = {

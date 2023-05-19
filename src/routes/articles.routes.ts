@@ -1,31 +1,16 @@
+import { Router } from "express"
+import ArticlesController from "../controller/ArticlesController"
 import authToken from "../middleware/authToken"
+import checkUsersIsLogged from "../middleware/checkUsersIsLogged"
 
-const { Router } = require('express')
 const articlesRoutes = Router()
-
-const ArticlesController = require('../controller/ArticlesController')
 const articlesController = new ArticlesController
-const CommentsController = require('../controller/CommentsController')
-const commentsController = new CommentsController
 
-const AuthArticles = require('../middleware/AuthArticles')
-const authArticles = new AuthArticles
-const AuthComments = require('../middleware/AuthComments')
-const authComments = new AuthComments
-
-
-
-articlesRoutes.post('/create', authToken, articlesController.create)
-articlesRoutes.delete('/delete', authArticles.verifyUsers, authArticles.authDelete,  articlesController.delete)
-articlesRoutes.put('/update', authArticles.verifyUsers, authArticles.authCreate,  articlesController.update)
+articlesRoutes.post('/create', authToken, checkUsersIsLogged, articlesController.create)
+articlesRoutes.put('/update', authToken, checkUsersIsLogged, articlesController.update)
+articlesRoutes.delete('/delete', authToken, checkUsersIsLogged,  articlesController.delete)
 articlesRoutes.get('/show',  articlesController.show)
+articlesRoutes.get('/show/user', authToken, articlesController.show)
 articlesRoutes.get('/show-all', articlesController.index)
 
-
-
-articlesRoutes.post('/create-comments', authComments.verify, commentsController.create)
-articlesRoutes.delete('/delete-comments', authComments.verify, commentsController.delete)
-articlesRoutes.get('/all-comments', commentsController.index)
-articlesRoutes.get('/comments', commentsController.show)
-
-module.exports = articlesRoutes
+export default articlesRoutes
