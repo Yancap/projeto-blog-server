@@ -1,7 +1,9 @@
-const { verify } = require('jsonwebtoken');
-const config = require("../config")
+import { NextFunction, Request, Response } from "express";
+import { verify } from "jsonwebtoken";
+import config from "../config";
 
-async function authToken(request, response, next){
+
+export default async function authToken(request: Request, response: Response, next: NextFunction){
     const head  = request.headers.authorization
     if ( head ) {
         const [, token ] = head.split(" ")
@@ -25,5 +27,3 @@ async function authToken(request, response, next){
     }
     return next()
 }
-
-module.exports = authToken

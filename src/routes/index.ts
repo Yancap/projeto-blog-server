@@ -1,7 +1,8 @@
-const { Router } = require('express')
+import { Router } from "express"
+import usersRoutes from "./users.routes"
+
 const routes = Router()
 
-const usersRoutes = require('./users.routes')
 const articlesRoutes = require('./articles.routes')
 const searchRoutes = require('./search.routes')
 // const adminRoutes = require('./admin.routes')
@@ -11,4 +12,4 @@ routes.use('/articles', articlesRoutes)
 routes.use('/search', searchRoutes)
 // routes.use('/admin', adminRoutes)
 
-module.exports = routes
+export default routes
