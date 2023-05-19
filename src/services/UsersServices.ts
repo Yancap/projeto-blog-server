@@ -5,14 +5,14 @@ import AppError from "../utils/AppError"
 import config from "../config"
 
 const knex = require("../database/knex")
-
+import dbConnection from "../database/knex"
 
 export class UsersServices {
     constructor(){}
     async login(request: LoginRequest): Promise<LoginResponse | number>{
         const { user_id, token, email, password } = request
         if (user_id && token) {
-            const user = await knex("users").where({id: user_id}).first()
+            const user = await dbConnection("users").where({id: user_id}).first()
             return {
                 token: token,
                 user_id: user.user_id,
@@ -22,7 +22,7 @@ export class UsersServices {
             }
         }
         if(!email && !password) throw new AppError('Sem Dados', 'redirect', 401, '/login')
-        const user = await knex("users").where({email: email}).first()
+        const user = await dbConnection("users").where({email: email}).first()
         if(!user) throw new AppError('Dados Incorretos', 'login')
         const check =  compare(password as string, user.password)
         if(!check)  throw new AppError('Dados Incorretos', 'login')
@@ -44,7 +44,7 @@ export class UsersServices {
     async register(request: RegisterRequest): Promise< DefaultResponse>{
         const { name, email, password } = request
         
-        const emailExist = await knex("users").where({email: email}).first()
+        const emailExist = await dbConnection("users").where({email: email}).first()
         if(emailExist) throw new AppError('Email Existente', 'email')
         
         try{
@@ -52,7 +52,7 @@ export class UsersServices {
                 name, email, avatar: null,
                 password, hierarchy: 'reader'
             }
-            await knex('users').insert(newUser)
+            await dbConnection('users').insert(newUser)
             return {message: 'OK'}
         } catch (error){
             throw new AppError(error , 'CRUD')
@@ -60,12 +60,12 @@ export class UsersServices {
     }
     async changePassword(request: ChangePasswordRequest): Promise<DefaultResponse>{
         const { user_id, oldPassword, newPassword } = request
-        const userPassword = await knex('users').where({id: user_id}).first().password
+        const userPassword = await (await dbConnection('users').where({id: user_id}).first()).password
         const checkPassword = await compare(oldPassword, userPassword)
         if (checkPassword) throw new AppError('Senha incorreta', 'update-password')
         const hashPassword = await hash(newPassword, 8)
         try {
-            await knex('users').where({id: user_id}).update({password: hashPassword})  
+            await dbConnection('users').where({id: user_id}).update({password: hashPassword})  
         } catch (error) {
             throw new AppError(error, 'update-password')
         }
@@ -76,7 +76,7 @@ export class UsersServices {
     async changeAvatar(request: ChangeAvatar): Promise<DefaultResponse>{
         const { user_id, avatar } = request
         try {
-            await knex('users').where({id: user_id}).update({avatar})
+            await dbConnection('users').where({id: user_id}).update({avatar})
         } catch (error) {
             throw new AppError(error, 'change-avatar')
         }
@@ -85,7 +85,7 @@ export class UsersServices {
     async getAuthor(id: string){
 
         try {
-            const author = await knex('users').where({id}).first()
+            const author = await dbConnection('users').where({id}).first()
             if(author){
                 return {
                     id: author.id,

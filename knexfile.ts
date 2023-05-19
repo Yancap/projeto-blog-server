@@ -1,4 +1,4 @@
-const path = require('path')
+import path from 'path'
 
 module.exports = {
 
@@ -8,7 +8,7 @@ module.exports = {
       filename: path.resolve(__dirname, "src", "database", "database.db")
     },
     pool: {
-      afterCreate: (conn, cb) => conn.run("PRAGMA foreign_keys = ON", cb)
+      afterCreate: (conn: any, cb: any) => conn.run("PRAGMA foreign_keys = ON", cb)
     },
     useNullAsDefault: true,
     migrations: {

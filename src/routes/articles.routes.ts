@@ -1,3 +1,5 @@
+import authToken from "../middleware/authToken"
+
 const { Router } = require('express')
 const articlesRoutes = Router()
 
@@ -10,14 +12,16 @@ const AuthArticles = require('../middleware/AuthArticles')
 const authArticles = new AuthArticles
 const AuthComments = require('../middleware/AuthComments')
 const authComments = new AuthComments
-const AuthUsers = require('../middleware/AuthUsers')
-const authUsers = new AuthUsers
 
-articlesRoutes.post('/create', authArticles.verifyUsers, authArticles.authCreate, articlesController.create)
+
+
+articlesRoutes.post('/create', authToken, articlesController.create)
 articlesRoutes.delete('/delete', authArticles.verifyUsers, authArticles.authDelete,  articlesController.delete)
 articlesRoutes.put('/update', authArticles.verifyUsers, authArticles.authCreate,  articlesController.update)
-articlesRoutes.get('/show', authUsers.authToken, articlesController.show)
+articlesRoutes.get('/show',  articlesController.show)
 articlesRoutes.get('/show-all', articlesController.index)
+
+
 
 articlesRoutes.post('/create-comments', authComments.verify, commentsController.create)
 articlesRoutes.delete('/delete-comments', authComments.verify, commentsController.delete)

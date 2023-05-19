@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./src/server.js",
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn ./src/server.ts",
-    "migrate": "knex migrate:latest"
+    "migrate": "knex migrate:latest",
+    "build": "tsup src"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "knex": "^2.4.2",
     "sqlite": "^4.1.2",
     "sqlite3": "^5.1.6",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },
   "devDependencies": {

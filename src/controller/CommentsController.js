@@ -4,7 +4,9 @@ const AppError = require("../utils/AppError")
 class CommentsController{
     async create(request, response){
         const { user_id, article_id, title, text, name } = request.body
-        if(!name) name = await (await knex('users').where({id: user_id}).first()).name
+        if(!name){
+            const userName = await (await knex('users').where({id: user_id}).first()).name
+        }
         try{
             await knex('comments').insert({user_id, article_id, title, text, name})
         } catch(error){
