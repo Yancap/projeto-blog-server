@@ -1,6 +1,6 @@
 import dbConnection from "../database/knex"
 import AppError from "../utils/AppError";
-import { CreateArticle, DeleteArticle, UpdateArticle } from "./IArticlesServices";
+import { CreateArticle, DeleteArticle, UpdateArticle } from "./interfaces/IArticlesServices";
 
 export default class ArticlesServices{
     async checkUsersPermissionsForCreate(user_id: string): Promise<boolean>{

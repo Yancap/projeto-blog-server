@@ -1,7 +1,8 @@
-const { Router } = require('express')
+import { Router } from "express"
+import SearchController from "../controller/SearchController"
+
 const searchRoutes = Router()
 
-const SearchController = require('../controller/SearchController')
 const searchController = new SearchController
 
 searchRoutes.get('/', searchController.index)

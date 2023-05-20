@@ -1,4 +1,4 @@
-import { ChangePasswordRequest, LoginRequest, LoginResponse, RegisterRequest,  DefaultResponse, ChangeAvatar } from "./IUsersServices"
+import { ChangePasswordRequest, LoginRequest, LoginResponse, RegisterRequest,  DefaultResponse, ChangeAvatar } from "./interfaces/IUsersServices"
 import { hash, compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 import AppError from "../utils/AppError"

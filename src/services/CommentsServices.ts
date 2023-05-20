@@ -1,6 +1,6 @@
 import dbConnection from "../database/knex";
 import AppError from "../utils/AppError";
-import { CreateComments, DeleteComments } from "./ICommentsServices";
+import { CreateComments, DeleteComments } from "./interfaces/ICommentsServices";
 
 export default class CommentsService{
     async createComment({user_id, article_id, title, text, name}: CreateComments){
