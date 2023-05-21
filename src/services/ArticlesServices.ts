@@ -1,15 +1,12 @@
 import dbConnection from "../database/knex"
-import AppError from "../utils/AppError";
 import { CreateArticle, DeleteArticle, UpdateArticle } from "./interfaces/IArticlesServices";
 
 export default class ArticlesServices{
     async checkUsersPermissionsForCreate(user_id: string): Promise<boolean>{
         const user = await dbConnection('users').where({id: user_id}).first()
         if(user.hierarchy && user.hierarchy !== 'reader'){
-            console.log('verdadeiro');
             return true
         }
-        console.log('falso');
         return false
     }
     async checkUsersPermissionForEdit(user_id:string, article_id: string){
@@ -26,7 +23,7 @@ export default class ArticlesServices{
             }) 
             return {message: 'Success'}
         } catch(error){
-            return error
+            return {error}
         }
     }
     async updateArticle({title, subtitle, text, article_id, user_id, image}: UpdateArticle){
@@ -38,6 +35,8 @@ export default class ArticlesServices{
         if (subtitle) update = {...update, subtitle}
         if (text) update = {...update, text}
         if (image) update = {...update, image}
+        console.log(update);
+        
         try {
            await dbConnection('articles').where({id: article_id}).update(update) 
         } catch (error) {

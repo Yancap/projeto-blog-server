@@ -2,9 +2,8 @@ import { NextFunction, Request, Response } from "express"
 import express from "express"
 import AppError from "./utils/AppError"
 import routes from "./routes"
+import cors from 'cors'
 require("express-async-errors")
-
-const cors = require('cors')
 
 const app = express()
 
@@ -12,7 +11,7 @@ const app = express()
 app.use(cors())
 app.use(express.json({limit: '5mb'}))
 app.use(routes)
-app.use((error: typeof AppError | any, request: Request, response: Response, next: NextFunction) => {
+app.use(async (error: typeof AppError | any, request: Request, response: Response, next: NextFunction) => {
     if (error instanceof AppError) {
         return response.status(error.status).json({
             status: "error",
@@ -20,8 +19,6 @@ app.use((error: typeof AppError | any, request: Request, response: Response, nex
             typeError: error.typeError
         })
     } 
-
-    console.error(error)
     return response.status(500).json({
         status: "error",
         message: "erro do servidor",

@@ -16,6 +16,8 @@ export default class ArticlesController{
     }
     async update(request: Request, response: Response){
         const { title, subtitle, text, article_id, user_id, image} = request.body
+        console.log(text);
+        
         const message = await articlesServices.updateArticle({title, subtitle, text, article_id, image, user_id})
         return response.json(message)
     }
@@ -30,18 +32,18 @@ export default class ArticlesController{
     }
     async show(request: Request, response: Response){
         const { id } = request.query
-        const { user_id } = request.body
+        const { user_id } = request.query
 
         if (id) {
             const article = await articlesServices.getArticleById(id as string)
-            if(!article) return new AppError('Esse Artigo não existe ou foi excluido', 'not_found', 404)
+            if(!article) response.send(new AppError('Esse Artigo não existe ou foi excluido', 'not_found', 404))
             return response.json(article) 
         } else if (user_id) {
             const article = await articlesServices.getArticlesByUserId(user_id as string)
-            if(!article) return new AppError('Esse Artigo não existe ou foi excluido', 'not_found', 404)
+            if(!article) response.send(new AppError('Esse Artigo não existe ou foi excluido', 'not_found', 404))
             return response.json(article) 
         } else{
-            throw new AppError('Sem Parâmetros', 'not_found', 404)
+            return response.send(new AppError('Sem Parâmetros', 'not_found', 404))
         }
         
     }

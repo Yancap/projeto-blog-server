@@ -1,5 +1,4 @@
 import dbConnection from "../database/knex";
-import AppError from "../utils/AppError";
 import { CreateComments, DeleteComments } from "./interfaces/ICommentsServices";
 
 export default class CommentsService{
