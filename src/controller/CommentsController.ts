@@ -14,7 +14,9 @@ export default class CommentsController{
     async index(request: Request, response: Response){
         const { article_id } = request.query
         const comments = await commentsService.getAllComments(article_id as string)
-        return response.json({comments})
+        console.log(comments);
+        
+        return response.json(comments)
     }
     async delete(request: Request, response: Response){
         const {comments_id, article_id, user_id} = request.body
@@ -25,6 +27,6 @@ export default class CommentsController{
     async show(request: Request, response: Response){
         const {id} = request.query
         const comments = await commentsService.getCommentById(id as string)
-        return response.json({comments})
+        return response.json(comments)
     }
 }

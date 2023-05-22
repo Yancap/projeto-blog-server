@@ -16,8 +16,6 @@ export default class ArticlesController{
     }
     async update(request: Request, response: Response){
         const { title, subtitle, text, article_id, user_id, image} = request.body
-        console.log(text);
-        
         const message = await articlesServices.updateArticle({title, subtitle, text, article_id, image, user_id})
         return response.json(message)
     }
