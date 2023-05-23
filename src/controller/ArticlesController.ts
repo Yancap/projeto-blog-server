@@ -31,7 +31,7 @@ export default class ArticlesController{
     async show(request: Request, response: Response){
         const { id } = request.query
         const { user_id } = request.query
-
+        
         if (id) {
             const article = await articlesServices.getArticleById(id as string)
             if(!article) response.send(new AppError('Esse Artigo não existe ou foi excluido', 'not_found', 404))
@@ -41,6 +41,12 @@ export default class ArticlesController{
             if(!article) response.send(new AppError('Esse Artigo não existe ou foi excluido', 'not_found', 404))
             return response.json(article) 
         } else{
+            const { user_id } = request.body
+            if (user_id) {
+                const article = await articlesServices.getArticlesByUserId(user_id as string)
+                if(!article) response.send(new AppError('Esse Artigo não existe ou foi excluido', 'not_found', 404))
+                return response.json(article) 
+            }
             return response.send(new AppError('Sem Parâmetros', 'not_found', 404))
         }
         

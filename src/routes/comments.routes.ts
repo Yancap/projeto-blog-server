@@ -11,5 +11,7 @@ commentsRoutes.post('/create', authToken, commentsController.create)
 commentsRoutes.delete('/delete', authToken, commentsController.delete)
 commentsRoutes.get('/all', commentsController.index)
 commentsRoutes.get('/show', commentsController.show)
+commentsRoutes.get('/show/user', authToken, commentsController.show)
+
 
 export default commentsRoutes

@@ -7,15 +7,12 @@ const commentsService = new CommentsService
 export default class CommentsController{
     async create(request: Request, response: Response){
         const { user_id, article_id, title, text, name } = request.body
-        
         const message = await commentsService.createComment({user_id, article_id, title, text, name})
         return response.json(message)
     }
     async index(request: Request, response: Response){
         const { article_id } = request.query
         const comments = await commentsService.getAllComments(article_id as string)
-        console.log(comments);
-        
         return response.json(comments)
     }
     async delete(request: Request, response: Response){
@@ -26,7 +23,12 @@ export default class CommentsController{
     }
     async show(request: Request, response: Response){
         const {id} = request.query
-        const comments = await commentsService.getCommentById(id as string)
-        return response.json(comments)
+        if(id){
+            const comments = await commentsService.getCommentById(id as string)
+            return response.json(comments) 
+        }
+        const {user_id} = request.body
+        const comments = await commentsService.getCommentByUserId(user_id as string)
+        return response.json(comments) 
     }
 }

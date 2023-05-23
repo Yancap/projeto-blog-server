@@ -35,8 +35,6 @@ export default class ArticlesServices{
         if (subtitle) update = {...update, subtitle}
         if (text) update = {...update, text}
         if (image) update = {...update, image}
-        console.log(update);
-        
         try {
            await dbConnection('articles').where({id: article_id}).update(update) 
         } catch (error) {

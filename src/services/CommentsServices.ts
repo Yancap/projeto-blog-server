@@ -39,4 +39,12 @@ export default class CommentsService{
             return error
         }
     }
+    async getCommentByUserId(comments_id: string){
+        try {
+            const comments = await dbConnection('comments').where({user_id: comments_id})
+            return comments
+        } catch (error) {
+            return error
+        }
+    }
 }
