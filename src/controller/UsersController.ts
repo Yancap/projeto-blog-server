@@ -20,12 +20,12 @@ export default class UsersController{
     }
     async update(request: Request, response: Response){
         const { user_id, avatar, newPassword, oldPassword } = request.body
-
+        console.log(request.body);
         if (!user_id) throw new AppError('Sem Dados', 'redirect', 401, '/login')
         if ((oldPassword && !newPassword) || (!oldPassword && newPassword)) throw new AppError('Digite as Duas Senhas', 'update-password')
         
         if(avatar){
-            const message = await usersServices.changeAvatar
+            const message = await usersServices.changeAvatar({user_id, avatar})
             return response.json({message})
         } else if (newPassword){
             const message = await usersServices.changePassword({user_id, newPassword, oldPassword})
