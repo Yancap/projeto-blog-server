@@ -43,7 +43,7 @@ export default class ArticlesServices{
         return {message: 'Success'}
     }
     async deleteArticle({user_id, article_id}: DeleteArticle){
-        const check = this.checkUsersPermissionForEdit(user_id, article_id)
+        const check = await this.checkUsersPermissionForEdit(user_id, article_id)
         if (!check) return {message: 'forbidden'}
         try {
             await dbConnection('articles').where({id: article_id}).delete()
