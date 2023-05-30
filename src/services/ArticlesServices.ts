@@ -9,7 +9,7 @@ export default class ArticlesServices{
         }
         return false
     }
-    async checkUsersPermissionForEdit(user_id:string, article_id: string){
+    async checkUsersPermissionForEdit(user_id: string, article_id: string){
         const check = await dbConnection('articles').where({id: article_id}).andWhere({user_id}).first()
         if (check) {
             return true
@@ -26,17 +26,12 @@ export default class ArticlesServices{
             return {error}
         }
     }
-    async updateArticle({title, subtitle, text, article_id, user_id, image}: UpdateArticle){
-        const check = this.checkUsersPermissionForEdit(user_id, article_id)
+    async updateArticle(article: UpdateArticle){
+        const check = this.checkUsersPermissionForEdit(article.user_id, article.id)
         if (!check) return {message: 'forbidden'}
 
-        let update = {}
-        if(title) update = {...update, title}
-        if (subtitle) update = {...update, subtitle}
-        if (text) update = {...update, text}
-        if (image) update = {...update, image}
         try {
-           await dbConnection('articles').where({id: article_id}).update(update) 
+           await dbConnection('articles').where({id: article.id}).update(article) 
         } catch (error) {
             return {error}
         }

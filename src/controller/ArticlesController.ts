@@ -15,8 +15,8 @@ export default class ArticlesController{
         return response.json(message)
     }
     async update(request: Request, response: Response){
-        const { title, subtitle, text, article_id, user_id, image} = request.body
-        const message = await articlesServices.updateArticle({title, subtitle, text, article_id, image, user_id})
+        const { title, subtitle, text, id, user_id, image} = request.body
+        const message = await articlesServices.updateArticle({title, subtitle, text, id, image, user_id})
         return response.json(message)
     }
     async delete(request: Request, response: Response){

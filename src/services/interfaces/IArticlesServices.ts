@@ -10,7 +10,7 @@ export interface UpdateArticle{
     title: string;
     subtitle: string;
     text: string;
-    article_id: string;
+    id: string;
     user_id: string;
     image: string;
 }
