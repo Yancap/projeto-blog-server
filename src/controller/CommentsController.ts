@@ -17,7 +17,8 @@ export default class CommentsController{
     }
     async delete(request: Request, response: Response){
         const {comments_id, article_id, user_id} = request.body
-        if(!comments_id) throw new AppError('Comentário Inexistente ou Excluído', 'not_found', 404)
+        
+        if(!comments_id) return response.json(new AppError('Comentário Inexistente ou Excluído', 'not_found', 404))
         const message = await commentsService.deleteComment({comments_id, article_id, user_id})
         return response.json(message)
     }
