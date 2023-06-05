@@ -8,11 +8,11 @@ export default class SearchServices{
         return articles
     }
     async getArticlesBySubtitle(subtitle: string): Promise<any>{
-        const articles = await dbConnection('articles').whereLike('title', `%${subtitle}%`)
+        const articles = await dbConnection('articles').whereLike('subtitle', `%${subtitle}%`)
         return articles
     }
     async getArticlesByText(text: string): Promise<any>{
-        const articles = await dbConnection('articles').whereLike('title', `%${text}%`)
+        const articles = await dbConnection('articles').whereLike('text', `%${text}%`)
         return articles
     }
     cleanSearch(content: string){
