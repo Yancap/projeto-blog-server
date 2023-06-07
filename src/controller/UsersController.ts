@@ -20,7 +20,7 @@ export default class UsersController{
     }
     async update(request: Request, response: Response){
         const { user_id, avatar, newPassword, oldPassword } = request.body
-        if (!user_id) throw new AppError('Sem Dados', 'redirect', 401, '/login')
+        if (!user_id) return response.json(new AppError('Sem Dados', 'redirect', 401, '/login')) 
         
         if(avatar){
             const message = await usersServices.changeAvatar({user_id, avatar})
@@ -29,12 +29,12 @@ export default class UsersController{
             const message = await usersServices.changePassword({user_id, newPassword, oldPassword})
             return response.json({message})
         } else{
-            throw new AppError('Sem Dados', 'redirect', 401, '/login')
+            return response.json( new AppError('Sem Dados', 'redirect', 401, '/login'))
         }
     }
     async getAuthor(request: Request, response: Response){
         const { id } = request.query
-        if (!id) throw new AppError('Sem Dados')
+        if (!id) return response.json(new AppError('Sem Dados')) 
         const resp = await usersServices.getAuthor(id as string)
         return response.json(resp)
     }
