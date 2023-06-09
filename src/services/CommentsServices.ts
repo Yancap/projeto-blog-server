@@ -11,15 +11,15 @@ export default class CommentsService{
         } catch(error){
             return {error}
         }
-        return {message: 'OK'}
+        return {message: 'Comentário criado'}
     }
     async deleteComment({comments_id, article_id, user_id}: DeleteComments){
         try{
             await dbConnection('comments').where({id: comments_id})
             .andWhere({article_id: article_id}).andWhere({user_id: user_id}).delete();
-            return {message: 'Success'}
+            return {message: 'Comentário deletado'}
         } catch(error){
-            return {error}
+            return {error, message: 'Error Interno'}
         }
     }
     async getAllComments(article_id: string){

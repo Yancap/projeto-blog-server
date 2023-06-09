@@ -53,9 +53,9 @@ export class UsersServices {
                 password, hierarchy: 'reader'
             }
             await dbConnection('users').insert(newUser)
-            return {message: 'OK'}
+            return {message: 'Registro realizado com sucesso'}
         } catch (error){
-             return {error: error, message:'CRUD'}
+             return {error: error, message:'Error interno'}
         }
     }
     async changePassword(request: ChangePasswordRequest){
@@ -82,7 +82,7 @@ export class UsersServices {
         } catch (error) {
             return {error: error, message:'CRUD'}
         }
-        return {message: 'OK'}
+        return {message: 'Avatar alterado com sucesso'}
     }
     async getAuthor(id: string){
 

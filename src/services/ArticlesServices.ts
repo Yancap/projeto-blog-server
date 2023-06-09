@@ -21,9 +21,9 @@ export default class ArticlesServices{
             await dbConnection('articles').insert({
                 title, subtitle, text, user_id, image, author
             }) 
-            return {message: 'Success'}
+            return {message: 'Artigo criado com sucesso!'}
         } catch(error){
-            return {error}
+            return {error, message: 'Error na criação'}
         }
     }
     async updateArticle(article: UpdateArticle){
@@ -35,7 +35,7 @@ export default class ArticlesServices{
         } catch (error) {
             return {error}
         }
-        return {message: 'Success'}
+        return {message: 'Artigo atualizado com sucesso'}
     }
     async deleteArticle({user_id, article_id}: DeleteArticle){
         const check = await this.checkUsersPermissionForEdit(user_id, article_id)
